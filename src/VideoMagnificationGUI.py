@@ -64,7 +64,7 @@ class VideoMagnificationGUI(QWidget):
         # Set output path based on initial input path if provided
         if self.initial_input_path:
             input_file = Path(self.initial_input_path)
-            default_output = f"{input_file.stem}_magnified_motion.mp4"  # Default mode is motion
+            default_output = f"{input_file.stem}_magnified.mp4"  # Default mode is motion
         else:
             default_output = "output.mp4"
         self.output_path = QLineEdit(default_output)

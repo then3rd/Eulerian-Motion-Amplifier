@@ -19,12 +19,22 @@ class EulerianVideoMagnification:  # noqa: D101
         self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    def build_gaussian_pyramid(self, frame, levels=4):
-        """Build Gaussian pyramid for spatial filtering"""
-        pyramid = [frame]
-        for _i in range(levels - 1):
-            frame = cv2.pyrDown(frame)
-            pyramid.append(frame)
+    def build_gaussian_pyramid(self, frame: np.ndarray, levels: int = 4) -> list[np.ndarray]:
+        """Build Gaussian pyramid for spatial filtering.
+
+        Args:
+            frame: Input frame as numpy array
+            levels: Number of pyramid levels to create (default: 4)
+
+        Returns:
+            List of downsampled frames, from original size to smallest
+
+        """
+        pyramid = [frame.copy()]
+        current_level = frame
+        for _ in range(levels - 1):
+            current_level = cv2.pyrDown(current_level)
+            pyramid.append(current_level)
         return pyramid
 
     def reconstruct_from_pyramid(self, pyramid, levels):
