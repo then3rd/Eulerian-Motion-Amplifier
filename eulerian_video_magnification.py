@@ -200,7 +200,7 @@ class EulerianVideoMagnification:  # noqa: D101
         if progress_callback:
             progress_callback(100)
 
-    def magnify_color(self, alpha=50, level=4, freq_min=0.4, freq_max=3.0):
+    def magnify_color(self, alpha=50, level=4, freq_min=0.4, freq_max=3.0, progress_callback=None):
         """Convenience method for color magnification (e.g., visualizing pulse)"""  # noqa: D401
         self.magnify_motion(
             alpha=alpha,
@@ -208,6 +208,7 @@ class EulerianVideoMagnification:  # noqa: D101
             freq_min=freq_min,
             freq_max=freq_max,
             attenuate=False,
+            progress_callback=progress_callback,
         )
 
 
@@ -247,6 +248,7 @@ class ProcessingThread(QThread):
                     level=self.level,
                     freq_min=self.freq_min,
                     freq_max=self.freq_max,
+                    progress_callback=self.progress_update.emit,
                 )
 
             self.finished_signal.emit(True, f"Success! Output saved to: {self.output_path}")
