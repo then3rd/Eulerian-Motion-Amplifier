@@ -18,11 +18,15 @@ hooks: $(VENV_PYTHON) ## Install git pre-commit hooks
 	$(VENV_PYTHON) -m pip install pre-commit
 	$(VENV_BIN)/pre-commit install
 
-VIDEO_FILE = big-buck-bunny-480p-30sec.mp4
-VIDEO_URL = https://github.com/chthomos/video-media-samples/raw/refs/heads/master/$(VIDEO_FILE)
+# VIDEO_URL = https://github.com/chthomos/video-media-samples/raw/refs/heads/master/
+# VIDEO_FILE = big-buck-bunny-480p-30sec.mp4
+VIDEO_ROOT = https://people.csail.mit.edu/mrub/evm/video/
+# VIDEO_FILE = face.mp4
+VIDEO_FILE = baby.mp4
+VIDEO_URL = $(VIDEO_ROOT)$(VIDEO_FILE)
 
 $(VIDEO_FILE):
-	wget --no-clobber $(VIDEO_URL)
+	curl $(VIDEO_URL) --output $(VIDEO_FILE)
 
 OPTS = --gui
 run: $(VIDEO_FILE) ## Run the script

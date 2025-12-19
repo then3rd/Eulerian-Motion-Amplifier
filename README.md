@@ -12,7 +12,7 @@ This tool allows you to amplify subtle motions and color changes in videos that 
 ## Prerequisites
 
 - Python 3.13
-- `wget` (for downloading sample videos)
+- `curl` (for downloading sample videos)
 - `make` (optional, for using Makefile commands)
 
 ## Installation
