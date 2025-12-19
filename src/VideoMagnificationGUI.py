@@ -1,7 +1,7 @@
 """GUI class"""
 
 import logging
-import os
+from pathlib import Path
 
 from PyQt6.QtWidgets import (
     QComboBox,
@@ -27,9 +27,10 @@ logger = logging.getLogger(__name__)
 class VideoMagnificationGUI(QWidget):
     """PyQt6 GUI for Eulerian Video Magnification"""
 
-    def __init__(self):
+    def __init__(self, input_path=None):
         super().__init__()
         self.processing_thread = None
+        self.initial_input_path = input_path
         self.init_ui()
 
     def init_ui(self):  # noqa: PLR0915
@@ -47,7 +48,10 @@ class VideoMagnificationGUI(QWidget):
         input_layout = QHBoxLayout()
         input_layout.addWidget(QLabel("Input Video:"))
         self.input_path = QLineEdit()
-        self.input_path.setPlaceholderText("Select input video file...")
+        if self.initial_input_path is not None:
+            self.input_path.setText(self.initial_input_path)
+        else:
+            self.input_path.setPlaceholderText("Select input video file...")
         input_layout.addWidget(self.input_path)
         self.input_btn = QPushButton("Browse")
         self.input_btn.clicked.connect(self.browse_input)
@@ -57,7 +61,13 @@ class VideoMagnificationGUI(QWidget):
         # Output file
         output_layout = QHBoxLayout()
         output_layout.addWidget(QLabel("Output Video:"))
-        self.output_path = QLineEdit("output.mp4")
+        # Set output path based on initial input path if provided
+        if self.initial_input_path:
+            input_file = Path(self.initial_input_path)
+            default_output = f"{input_file.stem}_magnified_motion.mp4"  # Default mode is motion
+        else:
+            default_output = "output.mp4"
+        self.output_path = QLineEdit(default_output)
         output_layout.addWidget(self.output_path)
         self.output_btn = QPushButton("Browse")
         self.output_btn.clicked.connect(self.browse_output)
@@ -169,8 +179,8 @@ class VideoMagnificationGUI(QWidget):
             self.input_path.setText(filename)
             # Auto-set output path based on input
             if not self.output_path.text() or self.output_path.text() == "output.mp4":
-                base, _ext = os.path.splitext(filename)
-                self.output_path.setText(f"{base}_magnified.mp4")
+                input_file = Path(filename)
+                self.output_path.setText(f"{input_file.parent / input_file.stem}_magnified.mp4")
 
     def browse_output(self):
         """Browse for output video file"""
@@ -197,7 +207,7 @@ class VideoMagnificationGUI(QWidget):
             self.log("Error: Please select an input video file")
             return
 
-        if not os.path.exists(input_path):
+        if not Path(input_path).exists():
             self.log(f"Error: Input file '{input_path}' not found")
             return
 

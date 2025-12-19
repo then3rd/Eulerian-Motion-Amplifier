@@ -2,8 +2,8 @@
 
 import argparse
 import logging
-import os
 import sys
+from pathlib import Path
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -24,17 +24,9 @@ def main():
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    # Check if GUI should be launched (no command-line arguments)
-    if len(sys.argv) == 1:
-        # Launch GUI
-        app = QApplication(sys.argv)  # pyright: ignore[reportPossiblyUnboundVariable]
-        gui = VideoMagnificationGUI()
-        gui.show()
-        sys.exit(app.exec())
-
     # Command-line mode
     parser = argparse.ArgumentParser(description="Eulerian Video Magnification")
-    parser.add_argument("-i", "--input", required=False, help="Input video file (MP4)")
+    parser.add_argument("-i", "--input", help="Input video file (MP4)")
     parser.add_argument(
         "-o", "--output", default="output.mp4", help="Output video file (default: output.mp4)"
     )
@@ -60,15 +52,19 @@ def main():
 
     args = parser.parse_args()
 
-    # Launch GUI if --gui flag is provided
-    if args.gui:
+    # Launch GUI if --gui flag is provided or no arguments
+    if args.gui or len(sys.argv) == 1:
         app = QApplication(sys.argv)
-        gui = VideoMagnificationGUI()
+        gui = VideoMagnificationGUI(input_path=args.input)
         gui.show()
         sys.exit(app.exec())
 
     # CLI processing
-    if not os.path.exists(args.input):
+    if not args.input:
+        logger.error("Input file is required for CLI mode")
+        return
+
+    if not Path(args.input).exists():
         logger.error("Input file '%s' not found", args.input)
         return
 
