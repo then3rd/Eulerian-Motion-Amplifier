@@ -1,0 +1,16 @@
+{
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnType": false
+    },
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.languageServerMode": "full",
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv",
+    "ruff.nativeServer": "on"
+}
