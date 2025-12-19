@@ -18,14 +18,5 @@ local_packages: $(VENV_PYTHON) ## Install required packages
 
 # OPTS = --show
 run: ## Run the script
-# 	$(VENV_PYTHON) -m src.zone_process --image example.jpg --points points_garage.json $(OPTS)
-	$(VENV_PYTHON) -m eulerian_video_magnification guitar.mp4
-	$(VENV_PYTHON) -m eulerian_video_magnification baby.mp4
-
-
-setup:
-	$(VENV_PYTHON) -m src.polygon_picker
-
-mesh:
-	$(VENV_PYTHON) -m src.mesh_test
-
+	wget --no-clobber https://github.com/chthomos/video-media-samples/raw/refs/heads/master/big-buck-bunny-480p-30sec.mp4
+	$(VENV_PYTHON) -m src.run --gui
