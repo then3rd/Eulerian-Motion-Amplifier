@@ -16,6 +16,10 @@ $(VENV_PYTHON):
 local_packages: $(VENV_PYTHON) ## Install required packages
 	$(VENV_PYTHON) -m pip install --no-cache-dir --verbose -r requirements.txt
 
+hooks: $(VENV) ## Install git pre-commit hooks
+	$(VENV_PYTHON) -m pip install pre-commit
+	$(VENV_BIN)/pre-commit install
+
 OPTS = --gui
 run: ## Run the script
 	wget --no-clobber https://github.com/chthomos/video-media-samples/raw/refs/heads/master/big-buck-bunny-480p-30sec.mp4
